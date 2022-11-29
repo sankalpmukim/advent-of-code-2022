@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "format": "prettier --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "dev": "npx nodemon ."
   },
   "keywords": [],
   "author": "",
