@@ -1,1 +1,1 @@
-import "./q5/runner.js";
+import "./q6/runner.js";
