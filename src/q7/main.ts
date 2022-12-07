@@ -3,7 +3,7 @@ interface Folder {
 }
 
 class Stack<T> {
-  private data: T[] = [];
+  readonly data: T[] = [];
 
   push(item: T) {
     this.data.push(item);
@@ -38,21 +38,18 @@ export const q7a = (input: string) => {
         continue;
       }
       folderStack.push(currentFolder);
-      if (typeof folderData[currentFolder] === "undefined") {
-        folderData[currentFolder] = 0;
-      }
+      folderData[currentFolder] = 0;
     } else if (line.startsWith("$ ls")) {
       i++;
       while (i < lines.length && !lines[i].startsWith("$")) {
-        if (lines[i].startsWith("dir")) {
-          i++;
-          continue;
-        } else {
+        if (!lines[i].startsWith("dir")) {
           folderData[folderStack.peek()] += Number(lines[i].split(" ")[0]);
-          i++;
         }
+        i++;
       }
       i--;
+    } else {
+      console.log(`line`, line);
     }
   }
 
@@ -75,7 +72,15 @@ export const q7a = (input: string) => {
       i++;
       while (i < lines.length && !lines[i].startsWith("$")) {
         if (lines[i].startsWith("dir")) {
-          folderData[folderStack2.peek()] += folderData[lines[i].split(" ")[1]];
+          // iterate over folderStack2, add folderData to each folder
+          let folderStack2Copy = folderStack2.data.slice();
+          while (folderStack2Copy.length > 0) {
+            const folder = folderStack2Copy.pop();
+            if (folder) {
+              folderData[folder] += folderData[lines[i].split(" ")[1]];
+            }
+          }
+
           i++;
         } else {
           i++;
@@ -87,7 +92,15 @@ export const q7a = (input: string) => {
   }
   console.log(folderData);
 
-  return lines.length;
+  // iterate over all the values of folderData and find the sum of all the values that are <= 100000
+  let sum = 0;
+  for (const key in folderData) {
+    if (folderData[key] <= 100000) {
+      sum += folderData[key];
+    }
+  }
+
+  return sum;
 };
 
 export const q7b = (input: string): number => {
